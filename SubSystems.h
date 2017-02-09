@@ -1,11 +1,7 @@
 #ifndef SUB_SYSTEM_H
 #define SUB_SYSTEM_H
 
-//#include <Wire.h>
 #include <SoftwareSerial.h>
-// #include <MeMCore.h>
-// #include <MeConfig.h>
-// #include <MePort.h>
 #include <MeDCMotor.h>
 #include <MeUltrasonicSensor.h>
 #include <MeBuzzer.h>
