@@ -2,6 +2,7 @@
 #define SUB_SYSTEM_H
 
 #include <SoftwareSerial.h>
+#include <MeSerial.h>
 #include <MeDCMotor.h>
 #include <MeUltrasonicSensor.h>
 #include <MeBuzzer.h>

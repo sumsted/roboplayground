@@ -42,7 +42,7 @@ void button_handler(){
 }
 
 void ir_remote_handler(){
- Serial.println("ir_remote_handler");
+//  Serial.println("ir_remote_handler");
   // Listen for command, remote for master and bot 2 bot for slave
   uint32_t value = 0;
   if(ss->get_remote_button(&value)){
@@ -94,8 +94,8 @@ void loop() {
   }
   if(is_master){
     ir_remote_handler();      
-  } else {
-    ir_command_handler();
-  }
+  } //else {
+  //   ir_command_handler();
+  // }
   ss->ir_loop();
 }
