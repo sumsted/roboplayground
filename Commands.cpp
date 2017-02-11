@@ -43,14 +43,20 @@ void Commands::command_a(boolean is_master){
   Serial.println("command_a: stop");
 }
 
-#define NUM_COMMANDS_B 6
+#define NUM_COMMANDS_B 12
 int cab[NUM_COMMANDS_B][3] = {
   {BOT_FORWARD, FAST, 3000},
-  {BOT_ROTATE_LEFT, MEDIUM, 100},
+  {BOT_ROTATE_LEFT, FAST, 2000},
   {BOT_STOP, STOP, 100},
-  {BOT_ROTATE_RIGHT, MEDIUM, 100},
+  {BOT_ROTATE_RIGHT, FAST, 2000},
   {BOT_FORWARD_LEFT, FAST, 2000},
-  {BOT_FORWARD_RIGHT, FAST, 2000}
+  {BOT_FORWARD_RIGHT, FAST, 2000},
+  {BOT_ROTATE_LEFT, FAST, 200},
+  {BOT_ROTATE_RIGHT, FAST, 200},
+  {BOT_ROTATE_LEFT, FAST, 200},
+  {BOT_ROTATE_RIGHT, FAST, 200},
+  {BOT_ROTATE_LEFT, FAST, 200},
+  {BOT_ROTATE_RIGHT, FAST, 200}
 };
 
 void Commands::command_b(){
