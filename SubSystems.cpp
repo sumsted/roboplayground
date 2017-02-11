@@ -130,12 +130,12 @@ void SubSystems::send_ir_string(String contents){
 }
 
 String SubSystems::get_ir_string(){
-  Serial.println("SubSystems: get_ir_string\n");
+  // Serial.println("SubSystems: get_ir_string\n");
   return ir.getString();
 }
 
 double SubSystems::get_distance(){
-  Serial.println("SubSystems: get_distance\n");
+  // Serial.println("SubSystems: get_distance\n");
   return ultrasonic.distanceCm();
 }
 

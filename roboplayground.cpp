@@ -94,8 +94,8 @@ void loop() {
   }
   if(is_master){
     ir_remote_handler();      
-  } //else {
-  //   ir_command_handler();
-  // }
+  } else {
+    ir_command_handler();
+  }
   ss->ir_loop();
 }

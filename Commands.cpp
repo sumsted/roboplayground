@@ -1,5 +1,6 @@
 #include "Commands.h"
 
+
 Commands::Commands(SubSystems *ss){
     ssp = ss;
 }
@@ -10,12 +11,13 @@ void Commands::command_a(boolean is_master){
   double master_offset = 10.0;
   double slack = 3.0;
   double offset = is_master ? master_offset: slave_offset;
+  Serial.println("command_a: offset: "+String(offset));
   ssp->play_note(300, NOTE_G4); 
-  long end_time = millis() + 5 * 1000;
+  long end_time = millis() + 20 * 1000;
   while(millis()<end_time){
     double current_distance = ssp->get_distance();
     Serial.println("command_a: current_distance: "+String(current_distance));
-    if(ssp->is_approximate(current_distance,offset,slack)){
+    if(!ssp->is_approximate(current_distance,offset,slack)){
       int speed = (current_distance - offset)>0?150:-150;
       Serial.println("command_a: move: "+String(speed));
       ssp->move(BOT_FORWARD, speed);
@@ -31,19 +33,35 @@ void Commands::command_a(boolean is_master){
   while(millis()<end_time){
     int i;
     for(i=0;i<4;i++){
-      ssp->move(BOT_ROTATE_RIGHT, MEDIUM);
-      delay(100);
-      ssp->move(BOT_ROTATE_LEFT, MEDIUM);
-      delay(100);      
+      ssp->move(BOT_ROTATE_RIGHT, FAST);
+      delay(200);
+      ssp->move(BOT_ROTATE_LEFT, FAST);
+      delay(200);      
     }
   ssp->move(BOT_STOP, STOP);
   }  
   Serial.println("command_a: stop");
 }
 
+#define NUM_COMMANDS_B 6
+int cab[NUM_COMMANDS_B][3] = {
+  {BOT_FORWARD, FAST, 3000},
+  {BOT_ROTATE_LEFT, MEDIUM, 100},
+  {BOT_STOP, STOP, 100},
+  {BOT_ROTATE_RIGHT, MEDIUM, 100},
+  {BOT_FORWARD_LEFT, FAST, 2000},
+  {BOT_FORWARD_RIGHT, FAST, 2000}
+};
+
 void Commands::command_b(){
   Serial.println("command_b");
   ssp->play_note(300, NOTE_B4); 
+  int i,j;
+  for(i=0;i<NUM_COMMANDS_B;i++){
+    ssp->move(cab[i][0],cab[i][1]);
+    delay(cab[i][2]);
+  }
+  ssp->move(BOT_STOP,STOP);
 }
 
 void Commands::command_c(){

@@ -44,7 +44,6 @@
 class SubSystems {
   public:
     SubSystems();
-    
 
     // ultrasonic
     boolean is_approximate(double a, double b, double e);
