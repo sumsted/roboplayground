@@ -5,7 +5,7 @@
 
 class Commands {
   public:
-    Commands(SubSystems *ss);
+    Commands(SubSystems &ss);
     void command_a(boolean is_master);
     void command_b();
     void command_c();
@@ -14,6 +14,6 @@ class Commands {
     void slave_acknowledge();
     void startup_sequence();
   private:
-    SubSystems *ssp;
+    SubSystems ss;
 };
 #endif

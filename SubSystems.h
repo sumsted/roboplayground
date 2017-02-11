@@ -48,9 +48,11 @@ class SubSystems {
     // ultrasonic
     boolean is_approximate(double a, double b, double e);
     double get_distance();
+    boolean scan_to(double distance, double error);
 
     // motor movement
     void move(int direction, int speed);
+    void move_to(double distance, double error);
 
     // colors and sound
     void play_note(int d, int n);

@@ -1,8 +1,8 @@
 #include "Commands.h"
 
 
-Commands::Commands(SubSystems *ss){
-    ssp = ss;
+Commands::Commands(SubSystems &ssr){
+    ss = ssr;
 }
 
 void Commands::command_a(boolean is_master){
@@ -12,33 +12,33 @@ void Commands::command_a(boolean is_master){
   double slack = 3.0;
   double offset = is_master ? master_offset: slave_offset;
   Serial.println("command_a: offset: "+String(offset));
-  ssp->play_note(300, NOTE_G4); 
+  ss.play_note(300, NOTE_G4); 
   long end_time = millis() + 20 * 1000;
   while(millis()<end_time){
-    double current_distance = ssp->get_distance();
+    double current_distance = ss.get_distance();
     Serial.println("command_a: current_distance: "+String(current_distance));
-    if(!ssp->is_approximate(current_distance,offset,slack)){
+    if(!ss.is_approximate(current_distance,offset,slack)){
       int speed = (current_distance - offset)>0?150:-150;
       Serial.println("command_a: move: "+String(speed));
-      ssp->move(BOT_FORWARD, speed);
+      ss.move(BOT_FORWARD, speed);
     } else {
       Serial.println("command_a: stop: ");
-      ssp->move(BOT_STOP, STOP);
+      ss.move(BOT_STOP, STOP);
     }
     delay(500);
     //test
   }
-  ssp->move(BOT_STOP, STOP);
+  ss.move(BOT_STOP, STOP);
   end_time = millis() + 500;
   while(millis()<end_time){
     int i;
     for(i=0;i<4;i++){
-      ssp->move(BOT_ROTATE_RIGHT, FAST);
+      ss.move(BOT_ROTATE_RIGHT, FAST);
       delay(200);
-      ssp->move(BOT_ROTATE_LEFT, FAST);
+      ss.move(BOT_ROTATE_LEFT, FAST);
       delay(200);      
     }
-  ssp->move(BOT_STOP, STOP);
+  ss.move(BOT_STOP, STOP);
   }  
   Serial.println("command_a: stop");
 }
@@ -61,33 +61,47 @@ int cab[NUM_COMMANDS_B][3] = {
 
 void Commands::command_b(){
   Serial.println("command_b");
-  ssp->play_note(300, NOTE_B4); 
+  ss.play_note(300, NOTE_B4); 
   int i,j;
   for(i=0;i<NUM_COMMANDS_B;i++){
-    ssp->move(cab[i][0],cab[i][1]);
+    ss.move(cab[i][0],cab[i][1]);
     delay(cab[i][2]);
   }
-  ssp->move(BOT_STOP,STOP);
+  ss.move(BOT_STOP,STOP);
 }
 
 void Commands::command_c(){
   Serial.println("command_c");
-  ssp->play_note(300, NOTE_C4); 
+  ss.play_note(300, NOTE_C4);
+  int i;
+  boolean target_found=false;
+  for(i=0;i<1;i++){
+    ss.show_color(WHITE);
+    if(ss.scan_to(50, 10)){
+      Serial.println("command_c: found");
+      ss.show_color(GREEN);
+      ss.move_to(10,3);
+    } else{
+      Serial.println("command_c: not found");
+      ss.show_color(RED);
+      break;
+    }
+  }
 }
 
 void Commands::command_d(){
   Serial.println("command_d");
-  ssp->play_note(300, NOTE_D4); 
+  ss.play_note(300, NOTE_D4); 
 }
 
 void Commands::master_command(String command){
   Serial.println("master_command");
   int i;
   for(i=0;i<5;i++){
-    ssp->show_color(WHITE);
-    ssp->show_color(RED);
+    ss.show_color(WHITE);
+    ss.show_color(RED);
   }
-  ssp->send_ir_string(command);
+  ss.send_ir_string(command);
 }
 
 void Commands::slave_acknowledge(){
@@ -98,12 +112,12 @@ void Commands::startup_sequence(){
   Serial.println("startup_sequence");
   int i;
   for(i=0;i<1;i++){
-    ssp->show_color(200,WHITE);
-    ssp->play_note(300, NOTE_G4); 
-    ssp->show_color(200,RED);
-    ssp->play_note(300, NOTE_E4); 
-    ssp->show_color(200,GREEN);
-    ssp->play_note(300, NOTE_C4); 
-    ssp->show_color(200,BLUE);
+    ss.show_color(200,WHITE);
+    ss.play_note(300, NOTE_G4); 
+    ss.show_color(200,RED);
+    ss.play_note(300, NOTE_E4); 
+    ss.show_color(200,GREEN);
+    ss.play_note(300, NOTE_C4); 
+    ss.show_color(200,BLUE);
   }
 }

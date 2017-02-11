@@ -139,4 +139,57 @@ double SubSystems::get_distance(){
   return ultrasonic.distanceCm();
 }
 
+boolean SubSystems::scan_to(double distance, double error){
+  Serial.println("SubSystems: scan_to: "+String(distance));
+  int i;
+  double actual;
+  boolean is_found = false;
+  for(i=0;i<60;i++){
+    actual = get_distance();
+    Serial.println("SubSystems: scan_to: actual "+String(actual));
+    // because of wide fov for us, get ttl steps across and backup steps/2
+    if(is_approximate(actual, distance, error)){
+      Serial.println("SubSystems: scan_to: in range: "+String(actual));
+      is_found = true;
+      int steps = 0;
+      while(is_approximate(actual, distance, error)){
+        delay(500);
+        move(BOT_ROTATE_RIGHT, 100);
+        delay(100);
+        move(BOT_STOP, STOP);
+        actual = get_distance();
+        steps++;
+      }
+      Serial.println("SubSystems: scan_to: fov steps: "+String(steps));
+      move(BOT_ROTATE_LEFT, 100);
+      delay(100*steps/2);
+      move(BOT_STOP, STOP);
+      break;
+    }
+    delay(500);
+    move(BOT_ROTATE_RIGHT, 100);
+    delay(100);
+    move(BOT_STOP, STOP);
+  }
+  Serial.println("SubSystems: scan_to: is_found: "+String(is_found));
+  return is_found;
+}
 
+void SubSystems::move_to(double distance, double error){
+  Serial.println("SubSystems: move_to: "+String(distance));
+  long end_time = millis() + 20 * 1000;
+  while(millis()<end_time){
+    double actual = get_distance();
+    Serial.println("SubSystems: move_to: actual: "+String(actual));
+    if(!is_approximate(actual,distance,error)){
+      int speed = (actual - distance)>0?150:-150;
+      Serial.println("SubSystems: move_to: "+String(speed));
+      move(BOT_FORWARD, speed);
+    } else {
+      Serial.println("SubSystems: move_to: ");
+      move(BOT_STOP, STOP);
+    }
+    delay(500);
+  }
+  move(BOT_STOP, STOP);
+}
