@@ -7,9 +7,8 @@ class Commands {
   public:
     Commands(SubSystems &ss);
     void command_a(boolean is_master);
-    void command_b();
+    void command_b(boolean is_master);
     void command_c();
-    void command_d();        
     void master_command(String command);
     void slave_acknowledge();
     void startup_sequence();

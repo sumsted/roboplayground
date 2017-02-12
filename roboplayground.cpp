@@ -14,8 +14,6 @@ String last_command = String("");
 
 
 void setup() {
-  // ss = new SubSystems();
-  // cmd = new Commands(ss);
   Serial.begin(9600);
   cmd.startup_sequence();
   ss.show_color(BLUE);
@@ -42,16 +40,14 @@ void button_handler(){
 }
 
 void ir_remote_handler(){
-//  Serial.println("ir_remote_handler");
   // Listen for command, remote for master and bot 2 bot for slave
   uint32_t value = 0;
   if(ss.get_remote_button(&value)){
     Serial.println("ir_remote_handler: ir value: "+String(value));
     switch (value){
       case IR_BUTTON_1:cmd.master_command("A");cmd.command_a(is_master);break;
-      case IR_BUTTON_2:cmd.master_command("B");cmd.command_b();break;
+      case IR_BUTTON_2:cmd.master_command("B");cmd.command_b(is_master);break;
       case IR_BUTTON_3:cmd.master_command("C");cmd.command_c();break;
-      case IR_BUTTON_4:cmd.master_command("D");cmd.command_d();break;
 
       case IR_BUTTON_UP:ss.move(BOT_FORWARD, FAST);break;
       case IR_BUTTON_LEFT:ss.move(BOT_ROTATE_LEFT, FAST);break;
@@ -67,22 +63,19 @@ void ir_remote_handler(){
 }
 
 void ir_command_handler(){
-    String command = ss.get_ir_string();
-    if(command!="" && command != last_command){
-      Serial.println("ir_command_handler: command:"+command+": last_command:"+last_command+":");  
-      if(command.endsWith("A") == true){
-        cmd.command_a(is_master);
-      } else if(command.endsWith("B") == true){
-        cmd.command_b();    
-      } else if(command.endsWith("C") == true){
-        cmd.command_c();    
-      } else if(command.endsWith("D") == true){
-        cmd.command_d();    
-      }
-      last_command = String(command);
-    }else{
-//      Serial.print(".");  
+  // The slave bot (blue) listens for IR commands from master
+  String command = ss.get_ir_string();
+  if(command!="" && command != last_command){
+    Serial.println("ir_command_handler: command:"+command+": last_command:"+last_command+":");  
+    if(command.endsWith("A") == true){
+      cmd.command_a(is_master);
+    } else if(command.endsWith("B") == true){
+      cmd.command_b(is_master);    
+    } else if(command.endsWith("C") == true){
+      cmd.command_c();    
     }
+    last_command = String(command);
+  }
 }
 
 boolean last_is_master = false;

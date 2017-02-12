@@ -57,8 +57,8 @@ class SubSystems {
     // colors and sound
     void play_note(int d, int n);
     void show_color(int d, int r, int g, int b);
-    void show_color(int d, int color);
-    void show_color(int color);
+    void show_color(int d, char color);
+    void show_color(char color);
 
     // button
     boolean is_button_pressed();
