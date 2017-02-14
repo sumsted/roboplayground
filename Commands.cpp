@@ -6,7 +6,7 @@ Commands::Commands(SubSystems &ssr){
 }
 
 void Commands::command_a(boolean is_master){
-  Serial.println("command_a: start");
+  // Serial.println("command_a: start");
   double slack = 3.0;
   double offset = is_master ? 10.0: 20.0;
   // Serial.println("command_a: offset: "+String(offset));
@@ -38,7 +38,7 @@ void Commands::command_a(boolean is_master){
     }
     ss.move(BOT_STOP, STOP);
   }  
-  Serial.println("command_a: stop");
+  // Serial.println("command_a: stop");
 }
 
 #define NUM_COMMANDS_B 12
@@ -74,7 +74,7 @@ int cabs[NUM_COMMANDS_B][3] = {
 
 void Commands::command_b(boolean is_master){
 
-  Serial.println("command_b");
+  // Serial.println("command_b");
   ss.play_note(300, NOTE_B4); 
   char i;
   for(i=0;i<NUM_COMMANDS_B;i++){
@@ -90,18 +90,18 @@ void Commands::command_b(boolean is_master){
 }
 
 void Commands::command_c(){
-  Serial.println("command_c");
+  // Serial.println("command_c");
   ss.play_note(300, NOTE_C4);
   char i;
   boolean target_found=false;
   for(i=0;i<1;i++){
     ss.show_color(WHITE);
     if(ss.scan_to(50, 10)){
-      Serial.println("command_c: found");
+      // Serial.println("command_c: found");
       ss.show_color(GREEN);
       ss.move_to(10,3);
     } else{
-      Serial.println("command_c: not found");
+      // Serial.println("command_c: not found");
       ss.show_color(RED);
       break;
     }
@@ -109,7 +109,7 @@ void Commands::command_c(){
 }
 
 void Commands::master_command(String command){
-  Serial.println("master_command");
+  // Serial.println("master_command");
   int i;
   for(i=0;i<5;i++){
     ss.show_color(WHITE);
@@ -119,11 +119,11 @@ void Commands::master_command(String command){
 }
 
 void Commands::slave_acknowledge(){
-  Serial.println("slave_acknowledge: "); 
+  // Serial.println("slave_acknowledge: "); 
 }
 
 void Commands::startup_sequence(){
-  Serial.println("startup_sequence");
+  // Serial.println("startup_sequence");
   int i;
   for(i=0;i<1;i++){
     ss.show_color(200,WHITE);

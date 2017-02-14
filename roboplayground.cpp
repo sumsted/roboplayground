@@ -14,25 +14,26 @@ String last_command = String("");
 
 
 void setup() {
-  Serial.begin(9600);
+  // Serial.begin(9600);
+  Serial.begin(115200);
   cmd.startup_sequence();
   ss.show_color(BLUE);
+}
+
+void serial_handler(){
+  // Use for bluetooth remote use
 }
 
 void button_handler(){
   // Toggle master slave setting if on board button pressed
   current_button_state = ss.is_button_pressed();
   if(current_button_state != previous_button_state){
-    Serial.println("loop:bs change");
     previous_button_state = current_button_state;
     if(current_button_state == true){
-      Serial.println("loop: master check");
       is_master = is_master ? false : true;
       if(is_master == true){
-        Serial.println("loop: is_master true");
         ss.show_color(RED);
       } else {
-        Serial.println("loop: is_master false");
         ss.show_color(BLUE);
       }
     } 
@@ -43,7 +44,6 @@ void ir_remote_handler(){
   // Listen for command, remote for master and bot 2 bot for slave
   uint32_t value = 0;
   if(ss.get_remote_button(&value)){
-    Serial.println("ir_remote_handler: ir value: "+String(value));
     switch (value){
       case IR_BUTTON_1:cmd.master_command("A");cmd.command_a(is_master);break;
       case IR_BUTTON_2:cmd.master_command("B");cmd.command_b(is_master);break;
@@ -66,7 +66,6 @@ void ir_command_handler(){
   // The slave bot (blue) listens for IR commands from master
   String command = ss.get_ir_string();
   if(command!="" && command != last_command){
-    Serial.println("ir_command_handler: command:"+command+": last_command:"+last_command+":");  
     if(command.endsWith("A") == true){
       cmd.command_a(is_master);
     } else if(command.endsWith("B") == true){
@@ -86,6 +85,7 @@ void loop() {
     last_is_master = is_master;
   }
   if(is_master){
+    serial_handler();
     ir_remote_handler();      
   } else {
     ir_command_handler();

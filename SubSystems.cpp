@@ -7,7 +7,7 @@ SubSystems::SubSystems(): motor_left(9), motor_right(10), ultrasonic(3), led(7, 
 
 void SubSystems::move(int direction, int speed)
 {
-  Serial.println("ss:move: direction: "+String(direction)+", speed: "+String(speed));
+  // Serial.println("ss:move: direction: "+String(direction)+", speed: "+String(speed));
    int leftSpeed = 0;
    int rightSpeed = 0;
    switch(direction){
@@ -61,20 +61,20 @@ boolean SubSystems::is_approximate(double a, double b, double e){
 }
 
 void SubSystems::play_note(int d, int n){
-  Serial.println("ss: play_note: duration: "+String(d)+", tone: "+String(n));
+  // Serial.println("ss: play_note: duration: "+String(d)+", tone: "+String(n));
   buzzer.tone(n, d);
   buzzer.noTone();      
 }
 
 void SubSystems::show_color(int d, int r, int g, int b){
-  Serial.println("ss: show_color: d: "+String(d)+", r,g,b: "+String(r)+", "+String(g)+", "+String(b));
+  // Serial.println("ss: show_color: d: "+String(d)+", r,g,b: "+String(r)+", "+String(g)+", "+String(b));
   led.setColor(0,r,g,b);
   led.show();
   delay(d);    
 }
 
 void SubSystems::show_color(int d, char color){
-  Serial.println("ss: show_color: d: "+String(d)+", color: "+String(color));
+  // Serial.println("ss: show_color: d: "+String(d)+", color: "+String(color));
   switch(color){
     case RED:
       led.setColor(0,255,0,0);
@@ -98,12 +98,12 @@ void SubSystems::show_color(int d, char color){
 }
 
 void SubSystems::show_color(char color){
-  Serial.println("ss:show_color: color: "+String(color));
+  // Serial.println("ss:show_color: color: "+String(color));
   show_color(0, color);
 }
 
 void SubSystems::ir_reset(){
-  Serial.println("ss:ir_reset\n");
+  // Serial.println("ss:ir_reset\n");
   ir.end();
   ir.begin();
 }
@@ -125,7 +125,7 @@ boolean SubSystems::is_button_pressed(){
 }
 
 void SubSystems::send_ir_string(String contents){
-  Serial.println("ss:send_ir_string\n");
+  // Serial.println("ss:send_ir_string\n");
   ir.sendString(contents);
 }
 
@@ -140,16 +140,16 @@ double SubSystems::get_distance(){
 }
 
 boolean SubSystems::scan_to(double distance, double error){
-  Serial.println("ss:scan_to: "+String(distance));
+  // Serial.println("ss:scan_to: "+String(distance));
   int i;
   double actual;
   boolean is_found = false;
   for(i=0;i<60;i++){
     actual = get_distance();
-    Serial.println("ss:scan_to: actual "+String(actual));
+    // Serial.println("ss:scan_to: actual "+String(actual));
     // because of wide fov for us, get ttl steps across and backup steps/2
     if(is_approximate(actual, distance, error)){
-      Serial.println("ss:scan_to: in range: "+String(actual));
+      // Serial.println("ss:scan_to: in range: "+String(actual));
       is_found = true;
       int steps = 0;
       while(is_approximate(actual, distance, error)){
@@ -160,7 +160,7 @@ boolean SubSystems::scan_to(double distance, double error){
         actual = get_distance();
         steps++;
       }
-      Serial.println("ss:scan_to: fov steps: "+String(steps));
+      // Serial.println("ss:scan_to: fov steps: "+String(steps));
       move(BOT_ROTATE_LEFT, 100);
       delay(100*steps/2);
       move(BOT_STOP, STOP);
@@ -171,22 +171,22 @@ boolean SubSystems::scan_to(double distance, double error){
     delay(100);
     move(BOT_STOP, STOP);
   }
-  Serial.println("ss:scan_to: is_found: "+String(is_found));
+  // Serial.println("ss:scan_to: is_found: "+String(is_found));
   return is_found;
 }
 
 void SubSystems::move_to(double distance, double error){
-  Serial.println("ss:move_to: "+String(distance));
+  // Serial.println("ss:move_to: "+String(distance));
   long end_time = millis() + 20 * 1000;
   while(millis()<end_time){
     double actual = get_distance();
-    Serial.println("ss:move_to: actual: "+String(actual));
+    // Serial.println("ss:move_to: actual: "+String(actual));
     if(!is_approximate(actual,distance,error)){
       int speed = (actual - distance)>0?150:-150;
-      Serial.println("ss:move_to: "+String(speed));
+      // Serial.println("ss:move_to: "+String(speed));
       move(BOT_FORWARD, speed);
     } else {
-      Serial.println("ss:move_to: ");
+      // Serial.println("ss:move_to: ");
       move(BOT_STOP, STOP);
     }
     delay(500);
