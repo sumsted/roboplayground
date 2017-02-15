@@ -2,6 +2,7 @@
 #include <MeMCore.h>
 #include "SubSystems.h"
 #include "Commands.h"
+#include "SerialController.h"
 
 boolean is_master = false;
 boolean previous_button_state = false;
@@ -9,6 +10,7 @@ boolean current_button_state = false;
 
 SubSystems ss;
 Commands cmd(ss);
+SerialController sc(ss);
 
 String last_command = String("");
 
@@ -79,6 +81,7 @@ void ir_command_handler(){
 
 boolean last_is_master = false;
 void loop() {
+  sc.serial_handler();
   button_handler();
   if(last_is_master != is_master){
     ss.ir_reset();

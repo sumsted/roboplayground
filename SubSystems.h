@@ -52,6 +52,8 @@ class SubSystems {
 
     // motor movement
     void move(int direction, int speed);
+    void move_left(int speed);
+    void move_right(int speed);
     void move_to(double distance, double error);
 
     // colors and sound

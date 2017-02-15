@@ -52,6 +52,14 @@ void SubSystems::move(int direction, int speed)
    motor_right.run((10)==M1?-(rightSpeed):(rightSpeed));
 }
 
+void SubSystems::move_left(int speed){
+   motor_left.run((9)==M1?-(leftSpeed):(leftSpeed));
+}
+
+void SubSystems::move_left(int speed){
+   motor_right.run((10)==M1?-(rightSpeed):(rightSpeed));
+}
+
 void SubSystems::ir_loop(){
   ir.loop();
 }
