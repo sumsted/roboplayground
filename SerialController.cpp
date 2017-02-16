@@ -106,13 +106,13 @@ void SerialController::read_sensor(int device){
     }
 }
 
-void SerialControllerSubSystems::run_module(int device){
+void SerialController::run_module(int device){
     //0xff 0x55 0x6 0x0 0x2 0x22 0x9 0x0 0x0 0xa 
     int port = read_buffer(6);
     int pin = port;
     switch(device){
         case MOTOR:{
-            port==M1?ss.move_left((int)readShort(7)):ss.move_right(r(int)eadShort(7));
+            port==M1?ss.move_left((int)read_short(7)):ss.move_right((int)read_short(7));
             } 
         break;
         case RGBLED:{

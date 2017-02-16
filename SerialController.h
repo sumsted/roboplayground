@@ -43,6 +43,7 @@ class SerialController {
         byte data_len;
         uint8_t command_index;
         char serial_read;
+        
         SubSystems ss;
 
         void route_command();
