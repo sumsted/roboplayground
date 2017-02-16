@@ -73,7 +73,6 @@ int cabs[NUM_COMMANDS_B][3] = {
 };
 
 void Commands::command_b(boolean is_master){
-
   // Serial.println("command_b");
   ss.play_note(300, NOTE_B4); 
   char i;

@@ -1,4 +1,3 @@
-// #include <Arduino.h>
 #include <MeMCore.h>
 #include "SubSystems.h"
 #include "Commands.h"
@@ -7,23 +6,16 @@
 boolean is_master = false;
 boolean previous_button_state = false;
 boolean current_button_state = false;
+String last_command = String("");
 
 SubSystems ss;
 Commands cmd(ss);
 SerialController sc(ss);
 
-String last_command = String("");
-
-
 void setup() {
-  // Serial.begin(9600);
   Serial.begin(115200);
   cmd.startup_sequence();
   ss.show_color(BLUE);
-}
-
-void serial_handler(){
-  // Use for bluetooth remote use
 }
 
 void button_handler(){

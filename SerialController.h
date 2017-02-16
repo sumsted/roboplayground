@@ -16,10 +16,6 @@
 
 class SerialController {
     public:
-        // bt serial
-        // command GET RUN RESET START
-        // run mod device MOTOR JOYSTICK RGDLED SERVO SEVSEG LEDMATRIX LIGHT_SENSOR IR
-        // SHUTTER DIGITAL PWM TONE SERVO_PIN TIMER
         SerialController(SubSystems &ss);
         void serial_handler();
     private:
@@ -43,7 +39,7 @@ class SerialController {
         byte data_len;
         uint8_t command_index;
         char serial_read;
-        
+
         SubSystems ss;
 
         void route_command();
