@@ -53,7 +53,7 @@ void SubSystems::move(int direction, int speed)
 }
 
 void SubSystems::move_left(int speed){
-   motor_left.run((9)==M1?-(speed):(speed));
+   motor_left.run((9)==M1?(speed):-(speed));
 }
 
 void SubSystems::move_right(int speed){
