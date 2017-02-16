@@ -9,11 +9,11 @@ Features
 --------
 
 1. All cpp code, the ino is empty
-2. robotplayground.cpp contains setup and loop and instantiates SubSystems, Commands and SerialController
+2. roboplayground.cpp contains setup and loop and instantiates SubSystems, Commands and SerialController
 3. All mBot device interfaces are in SubSystems
 4. Orchestration of mBot is in Commands
 5. SerialController has the code that interfaces with the makeblock bloothtooth app
-6. Handlers for ir remote and ir commands from master bot are in robotplayground.cpp
+6. Handlers for ir remote and ir commands from master bot are in roboplayground.cpp
 7. Use the board button to switch from master (red) to slave (blue)
 8. Both master and slave may take commands from bluetooth
 9. Master takes commands from ir remote

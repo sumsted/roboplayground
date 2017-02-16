@@ -80,7 +80,6 @@ void loop() {
     last_is_master = is_master;
   }
   if(is_master){
-    serial_handler();
     ir_remote_handler();      
   } else {
     ir_command_handler();
