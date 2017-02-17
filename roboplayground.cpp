@@ -13,7 +13,9 @@ Commands cmd(ss);
 SerialController sc(ss);
 
 void setup() {
+  Serial.println("setup");
   Serial.begin(115200);
+  // Serial.begin(9600);
   cmd.startup_sequence();
   ss.show_color(BLUE);
 }
@@ -39,9 +41,9 @@ void ir_remote_handler(){
   uint32_t value = 0;
   if(ss.get_remote_button(&value)){
     switch (value){
-      case IR_BUTTON_1:cmd.master_command("A");cmd.command_a(is_master);break;
-      case IR_BUTTON_2:cmd.master_command("B");cmd.command_b(is_master);break;
-      case IR_BUTTON_3:cmd.master_command("C");cmd.command_c();break;
+      case IR_BUTTON_1:cmd.master_command(String("A"));cmd.command_a(is_master);break;
+      case IR_BUTTON_2:cmd.master_command(String("B"));cmd.command_b(is_master);break;
+      case IR_BUTTON_3:cmd.master_command(String("C"));cmd.command_c();break;
 
       case IR_BUTTON_UP:ss.move(BOT_FORWARD, FAST);break;
       case IR_BUTTON_LEFT:ss.move(BOT_ROTATE_LEFT, FAST);break;
@@ -60,6 +62,7 @@ void ir_command_handler(){
   // The slave bot (blue) listens for IR commands from master
   String command = ss.get_ir_string();
   if(command!="" && command != last_command){
+    // Serial.println("command: "+command);
     if(command.endsWith("A") == true){
       cmd.command_a(is_master);
     } else if(command.endsWith("B") == true){
@@ -73,13 +76,14 @@ void ir_command_handler(){
 
 boolean last_is_master = false;
 void loop() {
-  sc.serial_handler();
   button_handler();
   if(last_is_master != is_master){
     ss.ir_reset();
     last_is_master = is_master;
+    Serial.println("master: "+String(is_master));
   }
   if(is_master){
+    sc.serial_handler();
     ir_remote_handler();      
   } else {
     ir_command_handler();

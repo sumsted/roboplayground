@@ -133,8 +133,8 @@ boolean SubSystems::is_button_pressed(){
 }
 
 void SubSystems::send_ir_string(String contents){
-  // Serial.println("ss:send_ir_string\n");
-  ir.sendString(contents);
+  // Serial.println("ss:send_ir_string:"+contents);
+  ir.sendString("   "+contents);
 }
 
 String SubSystems::get_ir_string(){
