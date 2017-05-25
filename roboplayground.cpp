@@ -2,6 +2,9 @@
 #include "SubSystems.h"
 #include "Commands.h"
 #include "SerialController.h"
+#include "I2CLink.h"
+
+#define I2C_SLAVE false
 
 boolean is_master = false;
 boolean previous_button_state = false;
@@ -11,6 +14,7 @@ String last_command = String("");
 SubSystems ss;
 Commands cmd(ss);
 SerialController sc(ss);
+I2CLink il(I2C_SLAVE, i2c_slave_action);
 
 void setup() {
   Serial.println("setup");
@@ -18,6 +22,21 @@ void setup() {
   // Serial.begin(9600);
   cmd.startup_sequence();
   ss.show_color(BLUE);
+}
+
+void i2c_slave_action(byte command, byte payload){
+  switch(command){
+    case I2C_LED_LEFT:
+      ss.show_color(0, payload);
+      break;
+    case I2C_LED_RIGHT:
+      ss.show_color(1, payload);
+      break;    
+  }
+}
+
+void i2c_master_action(byte command, byte payload){
+
 }
 
 void button_handler(){

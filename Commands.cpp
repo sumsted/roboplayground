@@ -1,11 +1,11 @@
 #include "Commands.h"
 
-Commands::Commands(SubSystems &ss){
-    ss = ss;
+void something(byte c, byte p){
+
 }
 
-void Commands::setup_i2c_link(boolean is_slave){
-  il = new I2CLink(is_slave, is_slave ? i2c_slave_action: i2c_master_action);
+Commands::Commands(SubSystems &ss){
+    ss = ss;
 }
 
 void Commands::command_a(boolean is_master){
@@ -136,25 +136,4 @@ void Commands::startup_sequence(){
     ss.play_note(300, NOTE_C4); 
     ss.show_color(200,BLUE);
   }
-}
-
-void Commands::command_d(){
-  // as master
-  // send led command
-  il.master_send_data(I2C_LED_LEFT, I2C_LED_BLUE);
-}
-
-void Commands::i2c_slave_action(byte command, byte payload){
-  switch(command){
-    case I2C_LED_LEFT:
-      ss.show_color(0, payload);
-      break;
-    case I2C_LED_RIGHT:
-      ss.show_color(1, payload);
-      break;    
-  }
-}
-
-void Commands::i2c_master_action(byte command, byte payload){
-
 }
