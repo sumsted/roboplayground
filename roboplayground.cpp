@@ -8,15 +8,15 @@ boolean is_master = false;
 boolean previous_button_state = false;
 boolean current_button_state = false;
 String last_command = String("");
+byte i2c_slave_receive_command = I2C_NO_COMMAND;
+byte i2c_slave_receive_payload = I2C_EMPTY;
+byte i2c_slave_send_command = I2C_NO_COMMAND;
+byte i2c_slave_send_payload = I2C_EMPTY;
 
 SubSystems ss;
 Commands cmd(ss);
 SerialController sc(ss);
 
-byte i2c_slave_receive_command = I2C_NO_COMMAND;
-byte i2c_slave_receive_payload = I2C_EMPTY;
-byte i2c_slave_send_command = I2C_NO_COMMAND;
-byte i2c_slave_send_payload = I2C_EMPTY;
 
 // These are the callbacks for i2c slave
 void i2c_slave_receive(int num_bytes){
@@ -31,6 +31,7 @@ void i2c_slave_send(){
     Wire.write(i2c_slave_send_payload);
 }
 
+// ic2_handler() called in loop by slave
 void i2c_handler(){
   // If i2c command received, process it and then reset it to no command
   if(i2c_slave_receive_command != I2C_NO_COMMAND){
@@ -67,6 +68,7 @@ void ir_remote_handler(){
       case IR_BUTTON_1:cmd.master_command(String("A"));cmd.command_a(is_master);break;
       case IR_BUTTON_2:cmd.master_command(String("B"));cmd.command_b(is_master);break;
       case IR_BUTTON_3:cmd.master_command(String("C"));cmd.command_c();break;
+      case IR_BUTTON_4:cmd.i2c_master_command(I2C_LED_LEFT, WHITE);break;
 
       case IR_BUTTON_UP:ss.move(BOT_FORWARD, FAST);break;
       case IR_BUTTON_LEFT:ss.move(BOT_ROTATE_LEFT, FAST);break;
