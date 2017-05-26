@@ -164,6 +164,6 @@ void Commands::i2c_command(byte command, byte payload, byte (&cp)[2]){
     }
 }
 
-void Commands:i2c_master_command(byte command, byte payload){
-  I2CLink.master_send_data(command, payload);
+void Commands::i2c_master_command(byte command, byte payload){
+  I2CLink::master_send_data(command, payload);
 }
