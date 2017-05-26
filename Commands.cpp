@@ -137,3 +137,29 @@ void Commands::startup_sequence(){
     ss.show_color(200,BLUE);
   }
 }
+
+void Commands::i2c_command(byte command, byte payload, byte (&cp)[2]){
+    int d;
+    cp[0] = command;
+    cp[1] = I2C_EMPTY;
+    switch(command){
+      case I2C_LED_LEFT:
+        ss.show_color(0, payload);
+        break;
+      case I2C_LED_RIGHT:
+        ss.show_color(1, payload);
+        break;
+      case I2C_ULTRASONIC:
+        d = (int) ss.get_distance();
+        cp[1] = (d > 255 || d < 0) ? 255 : d;
+        break;
+      case I2C_OPEN_DOOR:
+        ss.open_door();
+        cp[1] = I2C_OPEN;
+        break;
+      case I2C_CLOSE_DOOR:
+        ss.close_door();
+        cp[1] = I2C_CLOSE;
+        break;
+    }
+}

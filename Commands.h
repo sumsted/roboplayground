@@ -2,6 +2,7 @@
 #define COMMANDS_H
 
 #include "SubSystems.h"
+#include "I2CLink.h"
 
 class Commands {
   public:
@@ -12,6 +13,7 @@ class Commands {
     void master_command(String command);
     void slave_acknowledge();
     void startup_sequence();
+    void i2c_command(byte command, byte payload, byte (&cp)[2]);
   private:
     SubSystems ss;
 };

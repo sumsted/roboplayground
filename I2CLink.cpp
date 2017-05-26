@@ -1,9 +1,10 @@
 #include "I2CLink.h"
 
-I2CLink::I2CLink(boolean is_begin){
-    if(is_begin){
-        Wire.begin(WIRE_DEVICE);
-    }
+I2CLink::I2CLink(){
+}
+
+void I2CLink::begin(){
+    Wire.begin(WIRE_DEVICE);
 }
 
 void I2CLink::setup_slave(void(*receive_callback)(int), void(*request_callback)()){

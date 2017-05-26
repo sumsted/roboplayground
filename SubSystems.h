@@ -55,6 +55,8 @@ class SubSystems {
     void move_left(int speed);
     void move_right(int speed);
     void move_to(double distance, double error);
+    void open_door();
+    void close_door();
 
     // colors and sound
     void play_note(int d, int n);

@@ -60,6 +60,19 @@ void SubSystems::move_right(int speed){
    motor_right.run((10)==M1?-(speed):(speed));
 }
 
+void SubSystems::open_door(){
+  motor_left.run(100);
+  delay(2000);
+  motor_left.run(0);
+}
+
+
+void SubSystems::close_door(){
+  motor_left.run(-100);
+  delay(2000);
+  motor_left.run(0);
+}
+
 void SubSystems::ir_loop(){
   ir.loop();
 }
