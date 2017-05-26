@@ -6,6 +6,10 @@
 
 #define WIRE_DEVICE 8
 
+// build one as slave and the other as master
+// #define I2C_SLAVE 0
+#define I2C_SLAVE 1
+
 // I2C Command
 #define I2C_PING 0
 #define I2C_MOTOR_1_FORWARD 1

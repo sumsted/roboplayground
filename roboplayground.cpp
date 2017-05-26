@@ -4,9 +4,6 @@
 #include "SerialController.h"
 #include "I2CLink.h"
 
-#define I2C_SLAVE 0
-// #define I2C_SLAVE 1
-
 boolean is_master = false;
 boolean previous_button_state = false;
 boolean current_button_state = false;
