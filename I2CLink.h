@@ -5,6 +5,13 @@
 #include <Wire.h>
 
 #define WIRE_DEVICE 8
+/*
+ * Wiring UNO
+ * Arduino 1        Arduino 2
+ *    A4 SDA <----> A4 SDA       Analog
+ *    A5 SLC <----> A5 SLC       Clock
+ *       GND <----> GND          Ground
+ */
 
 // build one as slave and the other as master
 // #define I2C_SLAVE 0
