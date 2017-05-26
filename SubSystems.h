@@ -9,8 +9,6 @@
 #include <MeInfraredReceiver.h>
 #include <MeRGBLed.h>
 #include <MeIR.h>
-#include <utility/Wire.h>
-
 
 #define BOT_FORWARD 1
 #define BOT_BACKWARD 2

@@ -4,7 +4,8 @@
 #include "SerialController.h"
 #include "I2CLink.h"
 
-#define I2C_SLAVE false
+#define I2C_SLAVE 0
+// #define I2C_SLAVE 1
 
 boolean is_master = false;
 boolean previous_button_state = false;
@@ -14,7 +15,30 @@ String last_command = String("");
 SubSystems ss;
 Commands cmd(ss);
 SerialController sc(ss);
-I2CLink il(I2C_SLAVE, i2c_slave_action);
+
+
+void i2c_slave_receive(int num_bytes){
+  byte cp[] = {0, 0};
+  I2CLink::slave_receive_helper(num_bytes, cp);
+  switch(cp[0]){
+    case I2C_LED_LEFT:
+      ss.show_color(0, cp[1]);
+      break;
+    case I2C_LED_RIGHT:
+      ss.show_color(1, cp[1]);
+      break;    
+  }    
+}
+
+byte slave_send_command = 1;
+byte slave_send_payload = 1;
+
+void i2c_slave_send(){
+    Wire.write(slave_send_command);
+    Wire.write(slave_send_payload);
+}
+
+I2CLink il(true);
 
 void setup() {
   Serial.println("setup");
@@ -22,21 +46,11 @@ void setup() {
   // Serial.begin(9600);
   cmd.startup_sequence();
   ss.show_color(BLUE);
-}
-
-void i2c_slave_action(byte command, byte payload){
-  switch(command){
-    case I2C_LED_LEFT:
-      ss.show_color(0, payload);
-      break;
-    case I2C_LED_RIGHT:
-      ss.show_color(1, payload);
-      break;    
-  }
+  I2CLink::setup_slave(i2c_slave_receive, i2c_slave_send);
 }
 
 void i2c_master_action(byte command, byte payload){
-
+  I2CLink::master_send_data(I2C_LED_LEFT, RED);
 }
 
 void button_handler(){
