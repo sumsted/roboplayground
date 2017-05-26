@@ -4,6 +4,12 @@
 #include "SubSystems.h"
 #include <Wire.h>
 
+/*
+ * I2CLink is a helper for I2C communication.
+ * Keep the payload simple, only 2 bytes, command, payload.
+ * May change payload to int.
+ */
+
 #define WIRE_DEVICE 8
 /*
  * Wiring UNO
@@ -12,10 +18,6 @@
  *    A5 SLC <----> A5 SLC       Clock
  *       GND <----> GND          Ground
  */
-
-// build one as slave and the other as master
-// #define I2C_SLAVE 0
-#define I2C_SLAVE 1
 
 // I2C Command
 #define I2C_NO_COMMAND 0
