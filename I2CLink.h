@@ -45,7 +45,8 @@ class I2CLink {
     static void end();
     static void setup_slave(void(*receive_callback)(int), void(*request_callback)());
     static void master_send_data(byte command, byte payload);
-    static void master_request_data(void(*request_callback)(byte, byte));
+    static void master_request_data_cb(void(*request_callback)(byte, byte));
+    static void master_request_data(byte (&cp)[2]);
     static void slave_receive_helper(int num_bytes, byte (&cp)[2]);
 };
 

@@ -24,6 +24,7 @@ void i2c_slave_receive(int num_bytes){
   I2CLink::slave_receive_helper(num_bytes, cp);
   i2c_slave_receive_command = cp[0];
   i2c_slave_receive_payload = cp[1];
+  Serial.println("slave command: "+ String(i2c_slave_receive_command) + "payload: " + String(i2c_slave_receive_payload));
 }
 
 void i2c_slave_send(){
@@ -69,6 +70,10 @@ void ir_remote_handler(){
       case IR_BUTTON_2:cmd.master_command(String("B"));cmd.command_b(is_master);break;
       case IR_BUTTON_3:cmd.master_command(String("C"));cmd.command_c();break;
       case IR_BUTTON_4:cmd.i2c_master_command(is_master, I2C_LED_LEFT, WHITE);break;
+      case IR_BUTTON_5:cmd.i2c_master_command(is_master, I2C_OPEN_DOOR, I2C_EMPTY);break;
+      case IR_BUTTON_6:cmd.i2c_master_command(is_master, I2C_CLOSE_DOOR, I2C_EMPTY);break;
+      case IR_BUTTON_7:cmd.i2c_master_command(is_master, I2C_LED_LEFT, BLACK);break;
+      case IR_BUTTON_8:cmd.i2c_master_command(is_master, I2C_ULTRASONIC, I2C_EMPTY);break;
 
       case IR_BUTTON_UP:ss.move(BOT_FORWARD, FAST);break;
       case IR_BUTTON_LEFT:ss.move(BOT_ROTATE_LEFT, FAST);break;
@@ -125,7 +130,6 @@ void loop() {
       I2CLink::begin(true);
       I2CLink::setup_slave(i2c_slave_receive, i2c_slave_send);
     }
-    I2CLink::setup_slave(i2c_slave_receive, i2c_slave_send);
     last_is_master = is_master;
     Serial.println("master: "+String(is_master));
   }

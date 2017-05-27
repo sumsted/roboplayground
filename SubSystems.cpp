@@ -214,3 +214,24 @@ void SubSystems::move_to(double distance, double error){
   }
   move(BOT_STOP, STOP);
 }
+
+void SubSystems::get_angles(double (&angles)[3]){
+  angles[0] = gyro.getAngleX();
+  angles[1] = gyro.getAngleY();
+  angles[2] = gyro.getAngleZ();
+}
+
+void SubSystems::get_gyro_data(double (&gyro_data)[2]){
+  gyro_data[0] = gyro.getGyroX();
+  gyro_data[1] = gyro.getGyroY();
+}
+
+void SubSystems::get_heading(int16_t (&heading)[3]){
+  int16_t result;
+  result = compass.getHeading(&heading[0], &heading[1], &heading[2]);
+  if(result!=0){
+    heading[0] = 0;
+    heading[1] = 0;
+    heading[2] = 0;
+  }
+}

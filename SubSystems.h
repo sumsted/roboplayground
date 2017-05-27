@@ -9,6 +9,8 @@
 #include <MeInfraredReceiver.h>
 #include <MeRGBLed.h>
 #include <MeIR.h>
+#include <MeGyro.h>
+#include <MeCompass.h>
 
 #define BOT_FORWARD 1
 #define BOT_BACKWARD 2
@@ -50,6 +52,11 @@ class SubSystems {
     double get_distance();
     boolean scan_to(double distance, double error);
 
+    // gyro and compass
+    void get_angles(double (&angles)[3]);
+    void get_gyro_data(double (&gyro_data)[2]);
+    void get_heading(int16_t (&heading)[3]);
+
     // motor movement
     void move(int direction, int speed);
     void move_left(int speed);
@@ -80,6 +87,8 @@ class SubSystems {
     MeBuzzer buzzer;
     MeRGBLed led;
     MeIR ir;
+    MeGyro gyro;
+    MeCompass compass;
     long hello;
 };
 #endif

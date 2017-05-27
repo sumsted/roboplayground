@@ -22,9 +22,9 @@ void I2CLink::end(){
 
 void I2CLink::slave_receive_helper(int num_bytes, byte (&cp)[2]){
     byte i = 0;
-    while(Wire.available() > 1){
-        cp[i%2] = Wire.read();
-        i++;
+    if(Wire.available() > 1){
+        cp[0] = Wire.read();
+        cp[1] = Wire.read();
     }
 }
 
@@ -35,13 +35,21 @@ void I2CLink::master_send_data(byte command, byte payload){
     Wire.endTransmission();
 }
 
-void I2CLink::master_request_data(void(*request_callback)(byte, byte)){
-    byte cp[2] = {0, 0};
-    byte i = 0;
+void I2CLink::master_request_data_cb(void(*request_callback)(byte, byte)){
+    byte c=0;
+    byte p=0;
     Wire.requestFrom(WIRE_DEVICE, 2);
-    while(Wire.available()){
-        cp[i%2] = Wire.read();        
-        i++;
+    if(Wire.available()){
+        c = Wire.read();
+        p = Wire.read();
     }
-    request_callback(cp[0], cp[1]);
+    request_callback(c, p);
+}
+
+void I2CLink::master_request_data(byte(&cp)[2]){
+    Wire.requestFrom(WIRE_DEVICE, 2);
+    if(Wire.available()){
+        cp[0] = Wire.read();
+        cp[1] = Wire.read();
+    }
 }
