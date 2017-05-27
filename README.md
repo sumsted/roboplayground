@@ -18,3 +18,5 @@ Features
 8. Both master and slave may take commands from bluetooth
 9. Master takes commands from ir remote
 10. Slave ignores ir remote and takes commands from master
+11. I2CLink has helpers for I2C communication between mbots
+
