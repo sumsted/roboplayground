@@ -14,7 +14,7 @@ class Commands {
     void slave_acknowledge();
     void startup_sequence();
     void i2c_command(byte command, byte payload, byte (&cp)[2]);
-    void i2c_master_command(byte command, byte payload);
+    void i2c_master_command(boolean is_master, byte command, byte payload);
   private:
     SubSystems ss;
 };

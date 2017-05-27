@@ -68,7 +68,7 @@ void ir_remote_handler(){
       case IR_BUTTON_1:cmd.master_command(String("A"));cmd.command_a(is_master);break;
       case IR_BUTTON_2:cmd.master_command(String("B"));cmd.command_b(is_master);break;
       case IR_BUTTON_3:cmd.master_command(String("C"));cmd.command_c();break;
-      case IR_BUTTON_4:cmd.i2c_master_command(I2C_LED_LEFT, WHITE);break;
+      case IR_BUTTON_4:cmd.i2c_master_command(is_master, I2C_LED_LEFT, WHITE);break;
 
       case IR_BUTTON_UP:ss.move(BOT_FORWARD, FAST);break;
       case IR_BUTTON_LEFT:ss.move(BOT_ROTATE_LEFT, FAST);break;
@@ -110,7 +110,6 @@ void setup() {
   cmd.startup_sequence();
   ss.show_color(BLUE);
   I2CLink::begin();
-  I2CLink::setup_slave(i2c_slave_receive, i2c_slave_send);
 }
 
 boolean last_is_master = false;
@@ -118,6 +117,15 @@ void loop() {
   button_handler();
   if(last_is_master != is_master){
     ss.ir_reset();
+    if(is_master){
+      I2CLink::end();
+      I2CLink::begin();
+    } else {
+      I2CLink::end();
+      I2CLink::begin(true);
+      I2CLink::setup_slave(i2c_slave_receive, i2c_slave_send);
+    }
+    I2CLink::setup_slave(i2c_slave_receive, i2c_slave_send);
     last_is_master = is_master;
     Serial.println("master: "+String(is_master));
   }

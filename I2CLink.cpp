@@ -3,13 +3,21 @@
 I2CLink::I2CLink(){
 }
 
-void I2CLink::begin(){
-    Wire.begin(WIRE_DEVICE);
+void I2CLink::begin(boolean is_slave){
+    if(is_slave){
+        Wire.begin(WIRE_DEVICE);
+    }else{
+        Wire.begin();
+    }
 }
 
 void I2CLink::setup_slave(void(*receive_callback)(int), void(*request_callback)()){
     Wire.onReceive(receive_callback);
     Wire.onRequest(request_callback);
+}
+
+void I2CLink::end(){
+    Wire.end();
 }
 
 void I2CLink::slave_receive_helper(int num_bytes, byte (&cp)[2]){
