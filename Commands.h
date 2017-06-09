@@ -13,8 +13,8 @@ class Commands {
     void master_command(String command);
     void slave_acknowledge();
     void startup_sequence();
-    void i2c_command(byte command, byte payload, byte (&cp)[2]);
-    void i2c_master_command(boolean is_master, byte command, byte payload);
+    void i2c_command(byte command, int payload, byte &result_command, int &result_payload);
+    void i2c_master_command(boolean is_master, byte command, int payload);
   private:
     SubSystems ss;
 };
