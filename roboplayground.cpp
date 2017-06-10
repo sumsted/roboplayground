@@ -8,37 +8,32 @@ boolean is_master = false;
 boolean previous_button_state = false;
 boolean current_button_state = false;
 String last_command = String("");
-byte i2c_slave_receive_command = I2C_NO_COMMAND;
-int i2c_slave_receive_payload = I2C_EMPTY;
-byte i2c_slave_send_command = I2C_NO_COMMAND;
-int i2c_slave_send_payload = I2C_EMPTY;
+
+I2CPayload i2c_slave_receive_payload;
+I2CPayload i2c_slave_send_payload;
 
 SubSystems ss;
 Commands cmd(ss);
 SerialController sc(ss);
 
-
 // These are the callbacks for i2c slave
 void i2c_slave_receive(int num_bytes){
-  byte cp[] = {0, 0};
-  byte command;
-  int value;
-  I2CLink::slave_receive_helper(num_bytes, i2c_slave_receive_command, i2c_slave_receive_payload);
-  Serial.println("slave command: "+ String(i2c_slave_receive_command) + "payload: " + String(i2c_slave_receive_payload));
+  I2CLink::slave_receive_helper(i2c_slave_receive_payload);
+  Serial.println("slave command: "+ String(i2c_slave_receive_payload.get_command()) + "value: " + String(i2c_slave_receive_payload.get_int(0)));
 }
 
 void i2c_slave_send(){
-    Wire.write(i2c_slave_send_command);
-    Wire.write(i2c_slave_send_payload);
+  I2CLink::slave_send_helper(i2c_slave_send_payload);
 }
 
 // ic2_handler() called in loop by slave
 void i2c_handler(){
   // If i2c command received, process it and then reset it to no command
-  if(i2c_slave_receive_command != I2C_NO_COMMAND){
-    cmd.i2c_command(i2c_slave_receive_command, i2c_slave_receive_payload, i2c_slave_send_command, i2c_slave_send_payload);
-    i2c_slave_receive_command = I2C_NO_COMMAND;
-    i2c_slave_receive_payload = I2C_EMPTY;
+  if(i2c_slave_receive_payload.get_command() != I2C_NO_COMMAND){
+    cmd.i2c_command(i2c_slave_receive_payload, i2c_slave_send_payload);
+    i2c_slave_receive_payload.reset();
+    i2c_slave_receive_payload.set_command(I2C_NO_COMMAND);
+    i2c_slave_receive_payload.set_value_type(I2C_VALUE_TYPE_INT);
   }
 }
 

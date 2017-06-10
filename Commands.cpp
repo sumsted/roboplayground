@@ -138,20 +138,21 @@ void Commands::startup_sequence(){
   }
 }
 
-void Commands::i2c_command(byte command, int payload, byte &result_command, int &result_payload){
+void Commands::i2c_command(I2CPayload &command_payload, I2CPayload &result_payload){
     int d;
-    result_command = command;
-    result_payload = I2C_EMPTY;
-    switch(command){
+    result_payload.reset();
+    d = command_payload.get_int(0);
+    result_payload.set_command(command_payload.get_command());
+    switch(command_payload.get_command()){
       case I2C_LED_LEFT:
-        ss.show_color(0, payload);
+        ss.show_color(0, d);
         break;
       case I2C_LED_RIGHT:
-        ss.show_color(1, payload);
+        ss.show_color(1, d);
         break;
       case I2C_ULTRASONIC:
         d = (int) ss.get_distance();
-        result_payload = (d > 255 || d < 0) ? 255 : d;
+        result_payload.set_int(0, d);
         break;
       case I2C_OPEN_DOOR:
         ss.open_door();
@@ -164,15 +165,57 @@ void Commands::i2c_command(byte command, int payload, byte &result_command, int 
     }
 }
 
-void Commands::i2c_master_command(boolean is_master, byte command, int payload){
-  byte result_command;
-  int result_value;
+void Commands::i2c_master_command(boolean is_master, byte command, int value){
+  I2CPayload payload;
+  payload.set_command(command);
+  payload.set_int(0, value);
+  int response_value;
   if(is_master){
     ss.show_color(GREEN);
-    I2CLink::master_send_data(command, payload);
+    I2CLink::master_send_payload(payload);
     ss.show_color(BLUE);
-    I2CLink::master_request_data(result_command, result_value);
-    Serial.println("master response command: "+ String(result_command) + "payload: " + String(result_value));
+    I2CLink::master_request_payload(payload);
+    Serial.println("master response command: "+ String(payload.get_command()) + "payload: " + String(payload.get_int(0)));
     ss.show_color(RED);
-  }
+  }  
 }
+
+// void Commands::i2c_command(byte command, int payload, byte &result_command, int &result_payload){
+//     int d;
+//     result_command = command;
+//     result_payload = I2C_EMPTY;
+//     switch(command){
+//       case I2C_LED_LEFT:
+//         ss.show_color(0, payload);
+//         break;
+//       case I2C_LED_RIGHT:
+//         ss.show_color(1, payload);
+//         break;
+//       case I2C_ULTRASONIC:
+//         d = (int) ss.get_distance();
+//         result_payload = (d > 255 || d < 0) ? 255 : d;
+//         break;
+//       case I2C_OPEN_DOOR:
+//         ss.open_door();
+//         result_payload = I2C_OPEN;
+//         break;
+//       case I2C_CLOSE_DOOR:
+//         ss.close_door();
+//         result_payload = I2C_CLOSE;
+//         break;
+//     }
+// }
+
+// void Commands::i2c_master_command(boolean is_master, byte command, int payload){
+//   byte result_command;
+//   int result_value;
+//   if(is_master){
+//     ss.show_color(GREEN);
+//     I2CLink::master_send_data(command, payload);
+//     ss.show_color(BLUE);
+//     I2CLink::master_request_data(result_command, result_value);
+//     Serial.println("master response command: "+ String(result_command) + "payload: " + String(result_value));
+//     ss.show_color(RED);
+//   }
+// }
+
