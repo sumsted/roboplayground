@@ -41,7 +41,7 @@ void Commands::command_a(boolean is_master){
     }
     ss.move(BOT_STOP, STOP);
   }  
-  // Serial.println("command_a: stop");
+  Serial.println("command_a: stop");
 }
 
 #define NUM_COMMANDS_B 12
@@ -76,7 +76,7 @@ int cabs[NUM_COMMANDS_B][3] = {
 };
 
 void Commands::command_b(boolean is_master){
-  // Serial.println("command_b");
+  Serial.println("command_b");
   ss.play_note(300, NOTE_B4); 
   char i;
   for(i=0;i<NUM_COMMANDS_B;i++){
@@ -92,7 +92,7 @@ void Commands::command_b(boolean is_master){
 }
 
 void Commands::command_c(){
-  // Serial.println("command_c");
+  Serial.println("command_c");
   ss.play_note(300, NOTE_C4);
   char i;
   boolean target_found=false;
@@ -138,44 +138,3 @@ void Commands::startup_sequence(){
   }
 }
 
-void Commands::i2c_command(I2CPayload &command_payload, I2CPayload &result_payload){
-    int d;
-    result_payload.reset();
-    d = command_payload.get_int(0);
-    result_payload.set_command(command_payload.get_command());
-    switch(command_payload.get_command()){
-      case I2C_LED_LEFT:
-        ss.show_color(0, d);
-        break;
-      case I2C_LED_RIGHT:
-        ss.show_color(1, d);
-        break;
-      case I2C_ULTRASONIC:
-        d = (int) ss.get_distance();
-        result_payload.set_int(0, d);
-        break;
-      case I2C_OPEN_DOOR:
-        ss.open_door();
-        result_payload = I2C_OPEN;
-        break;
-      case I2C_CLOSE_DOOR:
-        ss.close_door();
-        result_payload = I2C_CLOSE;
-        break;
-    }
-}
-
-void Commands::i2c_master_command(boolean is_master, byte command, int value){
-  I2CPayload payload;
-  payload.set_command(command);
-  payload.set_int(0, value);
-  int response_value;
-  if(is_master){
-    ss.show_color(GREEN);
-    I2CLink::master_send_payload(payload);
-    ss.show_color(BLUE);
-    I2CLink::master_request_payload(payload);
-    Serial.println("master response command: "+ String(payload.get_command()) + "payload: " + String(payload.get_int(0)));
-    ss.show_color(RED);
-  }  
-}

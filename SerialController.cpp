@@ -153,16 +153,16 @@ void SerialController::write_buffer(char index, unsigned char c){
 }
 
 short SerialController::read_short(int idx){
-  val_short.byte_val[0] = read_buffer(idx);
-  val_short.byte_val[1] = read_buffer(idx+1);
-  return val_short.short_val; 
+    val_short.byte_val[0] = read_buffer(idx);
+    val_short.byte_val[1] = read_buffer(idx+1);
+    return val_short.short_val; 
 }
 
 void SerialController::send_float(float value){
     write_serial(2);
-     val.float_val = value;
-     write_serial(val.byte_val[0]);
-     write_serial(val.byte_val[1]);
-     write_serial(val.byte_val[2]);
-     write_serial(val.byte_val[3]);
+    val.float_val = value;
+    write_serial(val.byte_val[0]);
+    write_serial(val.byte_val[1]);
+    write_serial(val.byte_val[2]);
+    write_serial(val.byte_val[3]);
 }
